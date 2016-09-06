@@ -1,6 +1,6 @@
 {
-  "name": "node-postgres-promises",
-  "version": "0.0.0",
+  "name": "swagger-express-demo",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "start": "node ./bin/www"
@@ -15,6 +15,7 @@
     "morgan": "~1.6.1",
     "pg-promise": "^3.2.3",
     "serve-favicon": "~2.3.0",
-    "swagger-jsdoc": "^1.3.0"
+    "swagger-jsdoc": "^1.3.0",
+    "swagger-tools": "^0.10.1"
   }
 }

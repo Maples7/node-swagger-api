@@ -25,7 +25,8 @@ function getAllPuppies(req, res, next) {
 }
 
 function getSinglePuppy(req, res, next) {
-  var pupID = parseInt(req.params.id);
+  var pupID = parseInt(req.swagger.params.id.value);
+
   db.one('select * from pups where id = $1', pupID)
     .then(function (data) {
       res.status(200)

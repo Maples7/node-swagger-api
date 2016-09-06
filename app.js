@@ -5,6 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var swaggerJSDoc = require('swagger-jsdoc');
+var swaggerTools = require('swagger-tools');
 
 var routes = require('./routes/index');
 
@@ -43,6 +44,32 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// solve cors 
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', 'http://petstore.swagger.io');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, PUT, PATCH, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, api_key, Authorization');
+  next();
+});
+
+// Initialize the Swagger middleware
+swaggerTools.initializeMiddleware(swaggerSpec, (middleware) => {
+  // swaggerRouter configuration
+  var options = {
+    controllers: './controllers',
+    useStubs: process.env.NODE_ENV === 'development' ? true : false // Conditionally turn on stubs (mock mode)
+  };
+
+  // Interpret Swagger resources and attach metadata to request - must be first in swagger-tools middleware chain
+  app.use(middleware.swaggerMetadata());
+
+  // Validate Swagger requests
+  app.use(middleware.swaggerValidator());
+
+  // Serve the Swagger documents and Swagger UI
+  app.use(middleware.swaggerUi());
+});
 
 app.use('/', routes);
 
