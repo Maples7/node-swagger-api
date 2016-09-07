@@ -1,3 +1,4 @@
+var fs = require('fs');
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -6,6 +7,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var swaggerJSDoc = require('swagger-jsdoc');
 var swaggerTools = require('swagger-tools');
+var stt = require('swagger-test-templates');
 
 var routes = require('./routes/index');
 
@@ -32,6 +34,15 @@ var options = {
 
 // initialize swagger-jsdoc
 var swaggerSpec = swaggerJSDoc(options);
+
+// gen test files
+stt.testGen(swaggerSpec, {
+  assertionFormat: 'should',
+  testModule: 'supertest',
+  pathName: []
+}).map(testFile => {
+  fs.writeFileSync('./test/' + testFile.name, testFile.test);
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -60,7 +71,7 @@ swaggerTools.initializeMiddleware(swaggerSpec, (middleware) => {
 
   // Validate Swagger requests
   app.use(middleware.swaggerValidator({
-    validateResponse: true
+    validateResponse: false
   }));
 
   // Route validated requests to appropriate controller
