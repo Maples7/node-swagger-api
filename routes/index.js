@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-var db = require('../queries');
+// var db = require('../controllers/queries');
 
 /**
  * @swagger
@@ -21,7 +21,9 @@ var db = require('../queries');
 /**
  * @swagger
  * /api/puppies:
+ *   x-swagger-router-controller: queries
  *   get:
+ *     operationId: getAllPuppies
  *     tags:
  *       - Puppies
  *     description: Returns all puppies
@@ -31,14 +33,41 @@ var db = require('../queries');
  *       200:
  *         description: An array of puppies
  *         schema:
- *           $ref: '#/definitions/Puppy'
+ *           type: array
+ *           items:
+ *             $ref: '#/definitions/Puppy'
  */
-router.get('/api/puppies', db.getAllPuppies);
+// router.get('/api/puppies', db.getAllPuppies);
+
+/**
+ * @swagger
+ * /api/puppies:
+ *   post:
+ *     operationId: createPuppy
+ *     tags:
+ *       - Puppies
+ *     description: Creates a new puppy
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: puppy
+ *         description: Puppy object
+ *         in: body
+ *         required: true
+ *         schema:
+ *           $ref: '#/definitions/Puppy'
+ *     responses:
+ *       200:
+ *         description: Successfully created
+ */
+// router.post('/api/puppies', db.createPuppy);
 
 /**
  * @swagger
  * /api/puppies/{id}:
+ *   x-swagger-router-controller: queries
  *   get:
+ *     operationId: getSinglePuppy
  *     tags:
  *       - Puppies
  *     description: Returns a single puppy
@@ -56,34 +85,13 @@ router.get('/api/puppies', db.getAllPuppies);
  *         schema:
  *           $ref: '#/definitions/Puppy'
  */
-router.get('/api/puppies/:id', db.getSinglePuppy);
-
-/**
- * @swagger
- * /api/puppies:
- *   post:
- *     tags:
- *       - Puppies
- *     description: Creates a new puppy
- *     produces:
- *       - application/json
- *     parameters:
- *       - name: puppy
- *         description: Puppy object
- *         in: body
- *         required: true
- *         schema:
- *           $ref: '#/definitions/Puppy'
- *     responses:
- *       200:
- *         description: Successfully created
- */
-router.post('/api/puppies', db.createPuppy);
+// router.get('/api/puppies/:id', db.getSinglePuppy);
 
 /**
  * @swagger
  * /api/puppies/{id}:
  *   put:
+ *     operationId: updatePuppy
  *     tags:
  *       - Puppies
  *     description: Updates a single puppy
@@ -105,12 +113,13 @@ router.post('/api/puppies', db.createPuppy);
  *       200:
  *         description: Successfully updated
  */
-router.put('/api/puppies/:id', db.updatePuppy);
+// router.put('/api/puppies/:id', db.updatePuppy);
 
 /**
  * @swagger
  * /api/puppies/{id}:
  *   delete:
+ *     operationId: removePuppy
  *     tags:
  *       - Puppies
  *     description: Deletes a single puppy
@@ -126,7 +135,7 @@ router.put('/api/puppies/:id', db.updatePuppy);
  *       200:
  *         description: Successfully deleted
  */
-router.delete('/api/puppies/:id', db.removePuppy);
+// router.delete('/api/puppies/:id', db.removePuppy);
 
 
 module.exports = router;

@@ -55,59 +55,31 @@ app.use((req, res, next) => {
 
 // Initialize the Swagger middleware
 swaggerTools.initializeMiddleware(swaggerSpec, (middleware) => {
-  // swaggerRouter configuration
-  var options = {
-    controllers: './controllers',
-    useStubs: process.env.NODE_ENV === 'development' ? true : false // Conditionally turn on stubs (mock mode)
-  };
-
   // Interpret Swagger resources and attach metadata to request - must be first in swagger-tools middleware chain
   app.use(middleware.swaggerMetadata());
 
   // Validate Swagger requests
-  app.use(middleware.swaggerValidator());
+  app.use(middleware.swaggerValidator({
+    validateResponse: true
+  }));
+
+  // Route validated requests to appropriate controller
+  app.use(middleware.swaggerRouter({
+    // controllers: './controllers',  // To enable Mock, you shuold also comment this
+    useStubs: /*process.env.NODE_ENV === 'development' ?*/ true /*: false*/ // Conditionally turn on stubs (mock mode)
+  }));
 
   // Serve the Swagger documents and Swagger UI
   app.use(middleware.swaggerUi());
-});
 
-app.use('/', routes);
+  app.use('/', routes);
 
-app.get('/swagger.json', function(req, res) {
-  res.setHeader('Content-Type', 'application/json');
-  res.send(swaggerSpec);
-});
-
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-});
-
-// error handlers
-
-// development error handler
-// will print stacktrace
-if (app.get('env') === 'development') {
-  app.use(function(err, req, res, next) {
-    res.status( err.code || 500 )
-    .json({
-      status: 'error',
-      message: err
-    });
+  // catch 404 and forward to error handler
+  app.use(function(req, res, next) {
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
   });
-}
 
-// production error handler
-// no stacktraces leaked to user
-app.use(function(err, req, res, next) {
-  res.status(err.status || 500)
-  .json({
-    status: 'error',
-    message: err.message
-  });
+  app.listen(3000);
 });
-
-
-module.exports = app;
