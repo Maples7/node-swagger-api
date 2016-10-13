@@ -39,7 +39,13 @@ var swaggerSpec = swaggerJSDoc(options);
 stt.testGen(swaggerSpec, {
   assertionFormat: 'should',
   testModule: 'supertest',
-  pathName: []
+  pathName: ['/api/puppies', '/api/puppies/{id}'],
+  // loadTest: [
+  //   {pathName: '/api/puppies', operation:'get'},
+  //   {pathName: '/api/puppies', operation:'post'},
+  //   {pathName: '/api/puppies/{id}', operation:'get'},
+  //   {pathName: '/api/puppies/{id}', operation:'post'},
+  // ]
 }).map(testFile => {
   fs.writeFileSync('./test/' + testFile.name, testFile.test);
 });
