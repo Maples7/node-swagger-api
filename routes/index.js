@@ -5,7 +5,7 @@ var router = express.Router();
 
 /**
  * @swagger
- * definition:
+ * definitions:
  *   Puppy:
  *     properties:
  *       name:
