@@ -1,4 +1,5 @@
 # swagger-express-demo
+**[Depreciated] Swagger-tools is not well maintained and has some issues.**     
 A demo about how to elegantly use [swagger](http://swagger.io/) in an [Express](http://expressjs.com/) API server project.
 
 ## Instruction
